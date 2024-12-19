@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Домашняя страница</title>
+</head>
+<body>
+    <h1>Список книг</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Название</th>
+                <th>Автор</th>
+                <th>Цена</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for book in books %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.price }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h1>Рейтинг языков программирования</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Индекс</th>
+                <th>Язык</th>
+                <th>Рейтинг</th>
+                <th>Изменение</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for language in languages %}
+            <tr>
+                <td>{{ language.ind }}</td>
+                <td>{{ language.name }}</td>
+                <td>{{ language.rating }}</td>
+                <td>{{ language.change }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

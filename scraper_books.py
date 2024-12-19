@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 
 
 def scrape_chitai_gorod(query):
+
     base_url = "https://www.chitai-gorod.ru/search?phrase="
     search_url = base_url + query
     response = requests.get(search_url)
@@ -18,7 +19,8 @@ def scrape_chitai_gorod(query):
             price_tag = card.find('div', class_='product-price__value')
             price = price_tag.text.strip() if price_tag else 'Нет цены'
             books.append({'Название': title, 'Автор': author, 'Цена': price})
-            print(books[-1])
-
+    
+    for i in range(len(books)):
+        print(books[i])
 
 scrape_chitai_gorod("Python")
