@@ -12,11 +12,11 @@ django.setup()
 
 
 def scrape_chitai_gorod(query):
-    dct_in = {"C++": "C%2B%2B", "C": "Язык C", "Delphi/Object Pascal" : "Pascal",
+    dct_in = {"C++": "C%2B%2B", "C": "Язык С", "Delphi/Object Pascal" : "Pascal",
               "Assembly language": "Assembler", "C#": "Язык%20C", "R": "Искусство программирования на R"}
-    dct_to = {"C%2B%2B": "C++", "Язык C": "C",
+    dct_to = {"C%2B%2B": "C++",
               "Язык%20C": "C#", "Assembly language": "Assembler", "Искусство программирования на R" : "R"}
-    correct = {"Pascal" : "Delphi/Object Pascal", "Assembler" : "Assembly language"}
+    correct = {"Pascal" : "Delphi/Object Pascal", "Assembler" : "Assembly language", "Язык С" : "C"}
     page = 1
     count = 0
     while True:
@@ -29,7 +29,7 @@ def scrape_chitai_gorod(query):
             query = dct_to[query]
         print(query)
             
-        if response.status_code != 200 or page > 10:
+        if response.status_code != 200 or page > 15:
             break
         
         if response.status_code == 200 and count < 5:
@@ -53,7 +53,6 @@ def scrape_chitai_gorod(query):
                     if count == 5:
                         break
             page += 1
-            print(page)
         else:
             break
         
@@ -62,22 +61,33 @@ def scrape_chitai_gorod(query):
 def scrape_tiobe_index():
     url = "https://www.tiobe.com/tiobe-index/"
     response = requests.get(url)
+    
     if response.status_code == 200:
         soup = BeautifulSoup(response.text, 'html.parser')
         table = soup.find('table', {'class': 'table table-striped table-top20'})
+        
         if table:
             for tr in table.find_all('tr')[1:]:
+                
                 cells = [td.text.strip() for td in tr.find_all('td')]
                 cells = [cells[0]] + cells[4:]
                 if len(cells) >= 4:
                     ind = cells[0]
                     name = cells[1]
                     rating = cells[2]
-                    change = cells[3]  
+                    change = cells[3]
+                    if tr:
+                        img_tag = tr.find_all('img')[-1]
+                    logo_url = ""
+                    if img_tag:
+                        logo_url = img_tag['src']
+                        if not logo_url.startswith("http"):
+                            logo_url = "https://www.tiobe.com" + logo_url
+                    print(logo_url)
                     Language.objects.create(
                         ind=ind,
                         name=name,
                         rating=rating,
-                        change=change
+                        change=change,
+                        logo=logo_url
                     )
-

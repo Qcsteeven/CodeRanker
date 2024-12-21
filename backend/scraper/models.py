@@ -14,6 +14,7 @@ class Language(models.Model):
     name = models.CharField(max_length=255)
     rating = models.CharField(max_length=50)
     change = models.CharField(max_length=50)
+    logo = models.URLField(null=True, blank=True, default='https://www.tiobe.com/wp-content/themes/tiobe/tiobe-index/images/Python.png')
 
     def __str__(self):
         return self.name
