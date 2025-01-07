@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programming Languages Rating</title>
+    
+    {% load static %}
+    <link type="text/css" href="{% static 'scraper/css/styles.css' %}" rel="stylesheet"/>
+</head>
+<body>
+    <h1>Рейтинг языков программирования с обучающими материалами</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Место</th>
+                <th>Язык</th>
+                <th>Рейтинг</th>
+                <th>Изменение</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for language in languages %}
+            <tr class="language-row" data-lang="{{ language.name }}">
+                <td>{{ language.ind }}</td>
+                <td>
+                    <img src="{{ language.logo }}" alt="{{ language.name }} logo" style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px;">
+                    {{ language.name }}
+                </td>
+                <td>{{ language.rating }}</td>
+                <td>{{ language.change }}</td>
+            </tr>
+            <tr class="book-list-row" id="books-{{ language.name }}" style="display: none;">
+                <td colspan="4">
+                    <ul>
+                        {% for book in books %}
+                            {% if book.lang == language.name %}
+                            <li>
+                                <a href="{{ book.ref }}" target="_blank">{{ book.title }}</a> - {{ book.author }}
+                            </li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <script src="{% static 'scraper/js/script.js' %}"></script>
+</body>
+</html>

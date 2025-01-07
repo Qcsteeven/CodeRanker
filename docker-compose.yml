@@ -1,0 +1,33 @@
+services:
+  web-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: django_web
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/backend
+    environment:
+      - DB_HOST=database
+      - DB_NAME=dbname
+      - DB_USER=dbuser
+      - DB_PASS=pass
+    command: >
+      sh -c "
+      python manage.py makemigrations scraper &&
+      python manage.py migrate &&
+      python manage.py scrape_data &&
+      python manage.py runserver 0.0.0.0:8000
+      "
+    depends_on:
+      - database
+  database:
+    container_name: pg_db
+    image: postgres:17.2
+    environment:
+      - POSTGRES_DB=dbname
+      - POSTGRES_USER=dbuser
+      - POSTGRES_PASSWORD=pass
+    ports:
+      - "5432:5432"
